@@ -1,6 +1,5 @@
 #include "beam.h"
 
-
 Beam* Beam::instance = nullptr;
 
 Beam::Beam() {
@@ -51,12 +50,12 @@ std::string Beam::getString(std::string string) {
     return string;
 }
 
-std::string Beam::vectorToBeam(std::vector<std::string> vector) {
+std::string Beam::vectorToBeam(std::vector<std::string> vector, std::string delimiter) {
     std::ostringstream result_string;
     if (!vector.empty())
     {
         std::copy(vector.begin(), vector.end()-1,
-                  std::ostream_iterator<std::string>(result_string, ", "));
+                  std::experimental::make_ostream_joiner(result_string, delimiter));
         result_string << vector.back();
     }
     return result_string.str();
@@ -71,7 +70,45 @@ std::vector<std::string> Beam::tokenizeBeam(std::string beam) {
 }
 
 std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
-    return nullptr;
+    std::vector<std::string> processedSeq;
+    std::set<std::string> dozens = {"10", "20", "30", "40", "50", "60", "70", "80", "90"};
+    std::set<std::string> digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    std::set<std::string> dozenDigits = {"10", "20", "30", "40", "50", "60", "70", "80", "90", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
+    int size = numSeq.size();
+    for (auto i = 0; i != size; ++i) {
+        if (numSeq[i] == "1000") {
+            if (i == size - 1) {
+                processedSeq.emplace_back("000");
+            } else if (dozenDigits.find(numSeq[i + 1]) != dozenDigits.end()) {
+                processedSeq.emplace_back("0");
+            } else if (digits.find(numSeq[i + 1]) != digits.end()) {
+                if (numSeq[i + 2] == "100") {
+                    processedSeq.emplace_back(" ");
+                } else {
+                    processedSeq.emplace_back("00");
+                }
+            }
+        } else if (numSeq[i] == "100") {
+            if (i == size - 1) {
+                processedSeq.emplace_back("00");
+            } else if (dozenDigits.find(numSeq[i + 1]) != dozenDigits.end()) {
+                processedSeq.emplace_back(" ");
+            } else if (digits.find(numSeq[i + 1]) != digits.end()) {
+                processedSeq.emplace_back("0");
+            }
+        } else if (dozens.find(numSeq[i]) != dozens.end()) {
+            if (i == size - 1) {
+                processedSeq.emplace_back(numSeq[i]);
+            } else if (digits.find(numSeq[i + 1]) != digits.end()) {
+                std::string s;
+                s.push_back(numSeq[i][0]);
+                processedSeq.emplace_back(s);
+            }
+        } else {
+            processedSeq.emplace_back(numSeq[i]);
+        }
+    }
+    return vectorToBeam(processedSeq, "");
 }
 
 std::string Beam::main(std::string beam) {
@@ -96,7 +133,7 @@ std::string Beam::main(std::string beam) {
             result.push_back(token);
         }
     }
-    std::string meam = vectorToBeam(result);
+    std::string meam = vectorToBeam(result, ", ");
     return meam;
 }
 

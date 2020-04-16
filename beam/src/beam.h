@@ -9,6 +9,8 @@
 #include <vector>
 #include <sstream>
 #include <map>
+#include <set>
+#include <experimental/iterator>
 
 using namespace std;
 
@@ -25,7 +27,7 @@ public:
     Dictionary numberDictionary;
 private:
     static Beam* instance;
-    std::string vectorToBeam(std::vector<std::string> vector);
+    std::string vectorToBeam(std::vector<std::string> vector, std::string delimiter);
     std::vector<std::string> tokenizeBeam(std::string beam);
     std::string main(std::string beam);
     std::string processNumSeq(std::vector<std::string> numSeq);
