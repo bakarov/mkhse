@@ -8,10 +8,11 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <map>
 
 using namespace std;
 
-typedef std::unordered_map<std::string, std::string> Dictionary;
+typedef std::map<std::string, std::string> Dictionary;
 
 class Beam
 {
@@ -26,6 +27,8 @@ private:
     static Beam* instance;
     std::string vectorToBeam(std::vector<std::string> vector);
     std::vector<std::string> tokenizeBeam(std::string beam);
+    std::string main(std::string beam);
+    std::string processNumSeq(std::vector<std::string> numSeq);
 };
 
 #endif
