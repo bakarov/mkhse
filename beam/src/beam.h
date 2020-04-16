@@ -31,6 +31,7 @@ private:
     std::vector<std::string> tokenizeBeam(std::string beam);
     std::string main(std::string beam);
     std::string processNumSeq(std::vector<std::string> numSeq);
+    std::string mBB(std::vector<std::string> vector);
 };
 
 #endif

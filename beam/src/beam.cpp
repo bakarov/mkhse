@@ -33,6 +33,7 @@ Beam::Beam() {
             {"eighty", "80"},
             {"ninety", "90"},
             {"hundred", "100"},
+            {"thousand", "1000"}
     };
 }
 
@@ -54,8 +55,18 @@ std::string Beam::vectorToBeam(std::vector<std::string> vector, std::string deli
     std::ostringstream result_string;
     if (!vector.empty())
     {
-        std::copy(vector.begin(), vector.end()-1,
+        std::copy(vector.begin(), vector.end() - 1,
                   std::experimental::make_ostream_joiner(result_string, delimiter));
+        result_string << vector.back();
+    }
+    return result_string.str();
+}
+
+std::string Beam::mBB(std::vector<std::string> vector) {
+    std::ostringstream result_string;
+    if (!vector.empty()) {
+        std::copy(vector.begin(), vector.end()-1,
+                  std::ostream_iterator<std::string>(result_string, " "));
         result_string << vector.back();
     }
     return result_string.str();
@@ -83,7 +94,7 @@ std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
                 processedSeq.emplace_back("0");
             } else if (digits.find(numSeq[i + 1]) != digits.end()) {
                 if (numSeq[i + 2] == "100") {
-                    processedSeq.emplace_back(" ");
+                    processedSeq.emplace_back("");
                 } else {
                     processedSeq.emplace_back("00");
                 }
@@ -92,7 +103,7 @@ std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
             if (i == size - 1) {
                 processedSeq.emplace_back("00");
             } else if (dozenDigits.find(numSeq[i + 1]) != dozenDigits.end()) {
-                processedSeq.emplace_back(" ");
+                processedSeq.emplace_back("");
             } else if (digits.find(numSeq[i + 1]) != digits.end()) {
                 processedSeq.emplace_back("0");
             }
@@ -133,7 +144,11 @@ std::string Beam::main(std::string beam) {
             result.push_back(token);
         }
     }
-    std::string meam = vectorToBeam(result, ", ");
+    if (!numSeq.empty()) {
+        std::string processedNumSeq = processNumSeq(numSeq);
+        result.push_back(processedNumSeq);
+    }
+    std::string meam = mBB(result);
     return meam;
 }
 

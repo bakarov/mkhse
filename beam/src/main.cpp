@@ -3,6 +3,6 @@
 
 int main() {
     Beam* mB = new Beam();
-    std::cout << mB->beamSearch("hello how are you") << std::endl;
+    std::cout << mB->beamSearch("what twenty two for four and twenty with three hundred fifty five") << std::endl;
     return 0;
 }
