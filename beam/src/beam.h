@@ -25,6 +25,8 @@ public:
     std::string getString(std::string string);
     std::string beamSearch(std::string beam);
     Dictionary numberDictionary;
+    Dictionary measureDictionary;
+    Dictionary symbolDictionary;
 private:
     static Beam* instance;
     std::string vectorToBeam(std::vector<std::string> vector, std::string delimiter);

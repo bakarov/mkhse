@@ -35,6 +35,36 @@ Beam::Beam() {
             {"hundred", "100"},
             {"thousand", "1000"}
     };
+    measureDictionary = {
+            {"atmoshphere", "atm"},
+            {"centimeter", "cm"},
+            {"dalton", "Da"},
+            {"decibel", "db"},
+            {"hectare", "ha"},
+            {"hertz", "Hz"},
+            {"gallon", "gl"},
+            {"gram", "g"},
+            {"kilogram", "kg"},
+            {"kilometer", "km"},
+            {"meter", "m"},
+            {"mile", "mi"},
+            {"milligram", "mg"},
+            {"milliliter", "ml"},
+            {"millimeter", "m"},
+            {"nanometer", "nm"},
+    };
+    symbolDictionary = {
+            {"ampersand", "&"},
+            {"asterisk", "*"},
+            {"backslash", "\\"},
+            {"comma", ","},
+            {"dollar", "$"},
+            {"euro", "€"},
+            {"percent", "%"},
+            {"semicolon", ";"},
+            {"tilde", "~"},
+            {"underscore", "_"},
+    };
 }
 
 Beam* Beam::getInstance()
