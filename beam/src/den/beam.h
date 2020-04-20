@@ -15,6 +15,8 @@
 using namespace std;
 
 typedef std::map<std::string, std::string> Dictionary;
+typedef std::vector<std::string> Tokens;
+typedef bool Flag;
 
 class Beam
 {
@@ -29,10 +31,19 @@ public:
     Dictionary symbolDictionary;
 private:
     static Beam* instance;
+    Tokens mResult;
+    Tokens mNumSeq;
+    Tokens mAbbrSeq;
+    Flag mNumFlag;
+    Flag mAbbrFlag;
     std::string vectorToBeam(std::vector<std::string> vector, std::string delimiter);
     std::vector<std::string> tokenizeBeam(std::string beam);
     std::string main(std::string beam);
     std::string processNumSeq(std::vector<std::string> numSeq);
+    void finishNumSeq(std::string token);
+    void finishAbbrSeq();
+    void dealWithNumberToken(std::string token);
+    void checkSequencesAreNotEmpty();
     std::string mBB(std::vector<std::string> vector);
 };
 

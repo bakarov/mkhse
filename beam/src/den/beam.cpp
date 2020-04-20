@@ -152,77 +152,70 @@ std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
     return vectorToBeam(processedSeq, "");
 }
 
+void Beam::finishNumSeq(std::string token) {
+    mNumFlag = false;
+    mResult.push_back(processNumSeq(mNumSeq));
+    mNumSeq.clear();
+    if (token != "") {
+        mResult.push_back(token);
+    }
+}
+
+void Beam::checkSequencesAreNotEmpty() {
+    if (!mNumSeq.empty()) {
+        finishNumSeq("");
+    }
+    if (!mAbbrSeq.empty()) {
+        finishAbbrSeq();
+    }
+}
+
+void Beam::finishAbbrSeq() {
+    mAbbrFlag = false;
+    std::string abbrString = vectorToBeam(mAbbrSeq, "");
+    for (auto &c: abbrString) c = toupper(c);
+    mResult.push_back(abbrString);
+    mAbbrSeq.clear();
+}
+
+void Beam::dealWithNumberToken(std::string token) {
+    if (!mNumFlag) {
+        mNumFlag = true;
+    }
+    mNumSeq.push_back(numberDictionary[token]);
+    if (mAbbrFlag) {
+        finishAbbrSeq();
+    }
+}
+
 std::string Beam::main(std::string beam) {
-    std::vector<std::string> beam_tokens = tokenizeBeam(beam);
-    std::vector<std::string> result;
-    bool numFlag = false;
-    bool abbrFlag = false;
-    std::vector<std::string> numSeq;
-    std::vector<std::string> abbrSeq;
+    Tokens beam_tokens = tokenizeBeam(beam);
     for (auto i = 0; i != beam_tokens.size(); ++i) {
         std::string token = beam_tokens[i];
         if (numberDictionary.find(token) != numberDictionary.end()) {
-            if (numFlag == false) {
-                numFlag = true;
-            }
-            numSeq.push_back(numberDictionary[token]);
-            if (abbrFlag == true) {
-                abbrFlag = false;
-                if (abbrSeq.size() > 1) {
-                    std::string abbrString = vectorToBeam(abbrSeq, "");
-                    for (auto &c: abbrString) c = toupper(c);
-                    result.push_back(abbrString);
-                } else {
-                    result.push_back(abbrSeq[0]);
-                }
-                abbrSeq.clear();
-            }
+            dealWithNumberToken(token);
         } else {
-            if (numFlag == true) {
-                numFlag = false;
-                std::string processedNumSeq = processNumSeq(numSeq);
-                result.push_back(processedNumSeq);
-                numSeq.clear();
-                result.push_back(token);
+            if (mNumFlag) {
+                finishNumSeq(token);
             } else if (measureDictionary.find(token) != measureDictionary.end()) {
-                result.push_back(measureDictionary[token]);
+                mResult.push_back(measureDictionary[token]);
             } else {
-                if (abbrFlag == true) {
-                    if (token.size() == 1) {
-                        abbrSeq.emplace_back(token);
+                if (!mAbbrFlag) {
+                    if (token.size() == 1 and beam_tokens[i + 1].size() == 1) {
+                        mAbbrFlag = true;
+                        mAbbrSeq.push_back(token);
                     } else {
-                        abbrFlag = false;
-                        if (abbrSeq.size() > 1) {
-                            std::string abbrString = vectorToBeam(abbrSeq, "");
-                            for (auto &c: abbrString) c = toupper(c);
-                            result.push_back(abbrString);
-                        } else {
-                            result.push_back(abbrSeq[0]);
-                        }
-                        abbrSeq.clear();
-                        result.push_back(token);
+                        mResult.push_back(token);
                     }
                 } else {
-                    if (token.size() == 1) {
-                        abbrFlag = true;
-                        abbrSeq.push_back(token);
-                    } else {
-                        result.push_back(token);
-                    }
+                    finishAbbrSeq();
+                    mResult.push_back(token);
                 }
             }
         }
     }
-    if (!numSeq.empty()) {
-        std::string processedNumSeq = processNumSeq(numSeq);
-        result.push_back(processedNumSeq);
-    }
-    if (!abbrSeq.empty()) {
-        std::string abbrString = vectorToBeam(abbrSeq, "");
-        for (auto &c: abbrString) c = toupper(c);
-        result.push_back(abbrString);
-    }
-    std::string meam = mBB(result);
+    checkSequencesAreNotEmpty();
+    std::string meam = mBB(mResult);
     return meam;
 }
 
