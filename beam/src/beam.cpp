@@ -166,6 +166,17 @@ std::string Beam::main(std::string beam) {
                 numFlag = true;
             }
             numSeq.push_back(numberDictionary[token]);
+            if (abbrFlag == true) {
+                abbrFlag = false;
+                if (abbrSeq.size() > 1) {
+                    std::string abbrString = vectorToBeam(abbrSeq, "");
+                    for (auto &c: abbrString) c = toupper(c);
+                    result.push_back(abbrString);
+                } else {
+                    result.push_back(abbrSeq[0]);
+                }
+                abbrSeq.clear();
+            }
         } else {
             if (numFlag == true) {
                 numFlag = false;
@@ -177,16 +188,20 @@ std::string Beam::main(std::string beam) {
                 result.push_back(measureDictionary[token]);
             } else {
                 if (abbrFlag == true) {
-                    abbrFlag = false;
-                    if (abbrSeq.size() > 1) {
-                        std::string abbrString = vectorToBeam(abbrSeq, "");
-                        for (auto &c: abbrString) c = toupper(c);
-                        result.push_back(abbrString);
+                    if (token.size() == 1) {
+                        abbrSeq.emplace_back(token);
                     } else {
-                        result.push_back(abbrSeq[0]);
+                        abbrFlag = false;
+                        if (abbrSeq.size() > 1) {
+                            std::string abbrString = vectorToBeam(abbrSeq, "");
+                            for (auto &c: abbrString) c = toupper(c);
+                            result.push_back(abbrString);
+                        } else {
+                            result.push_back(abbrSeq[0]);
+                        }
+                        abbrSeq.clear();
+                        result.push_back(token);
                     }
-                    abbrSeq.clear();
-                    result.push_back(token);
                 } else {
                     if (token.size() == 1) {
                         abbrFlag = true;
