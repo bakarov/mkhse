@@ -123,8 +123,10 @@ std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
             } else if (dozenDigits.find(numSeq[i + 1]) != dozenDigits.end()) {
                 processedSeq.emplace_back("0");
             } else if (digits.find(numSeq[i + 1]) != digits.end()) {
-                if (numSeq[i + 2] == "100") {
-                    processedSeq.emplace_back("");
+                if (i != size - 2) {
+                    if (numSeq[i + 2] == "100") {
+                        processedSeq.emplace_back("");
+                    }
                 } else {
                     processedSeq.emplace_back("00");
                 }
@@ -137,13 +139,13 @@ std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
             } else if (digits.find(numSeq[i + 1]) != digits.end()) {
                 processedSeq.emplace_back("0");
             }
-        } else if (dozens.find(numSeq[i]) != dozens.end()) {
-            if (i == size - 1) {
-                processedSeq.emplace_back(numSeq[i]);
-            } else if (digits.find(numSeq[i + 1]) != digits.end()) {
+        } else if (dozens.find(numSeq[i]) != dozens.end() && i != size - 1) {
+            if (digits.find(numSeq[i + 1]) != digits.end()) {
                 std::string s;
                 s.push_back(numSeq[i][0]);
                 processedSeq.emplace_back(s);
+            }  else {
+                processedSeq.emplace_back(numSeq[i]);
             }
         } else {
             processedSeq.emplace_back(numSeq[i]);
