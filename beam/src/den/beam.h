@@ -24,8 +24,8 @@ public:
     static Beam* getInstance();
 
     Beam();
-    std::string getString(std::string string);
-    std::string beamSearch(std::string beam);
+    std::string getString(const std::string& string);
+    std::string beamSearch(const std::string& beam);
     Dictionary numberDictionary;
     Dictionary measureDictionary;
     Dictionary symbolDictionary;
@@ -36,15 +36,15 @@ private:
     Tokens mAbbrSeq;
     Flag mNumFlag;
     Flag mAbbrFlag;
-    std::string vectorToBeam(std::vector<std::string> vector, std::string delimiter);
-    std::vector<std::string> tokenizeBeam(std::string beam);
-    std::string main(std::string beam);
-    std::string processNumSeq(std::vector<std::string> numSeq);
-    void finishNumSeq(std::string token);
+    std::string vectorToBeam(const std::vector<std::string>& vector, const std::string& delimiter);
+    std::vector<std::string> tokenizeBeam(const std::string& beam) const;
+    std::string main(const std::string& beam);
+    std::string processNumSeq(const std::vector<std::string>& numSeq);
+    void finishNumSeq(const std::string& token);
     void finishAbbrSeq();
-    void dealWithNumberToken(std::string token);
+    void dealWithNumberToken(const std::string& token);
     void checkSequencesAreNotEmpty();
-    std::string mBB(std::vector<std::string> vector);
+    std::string mBB(const std::vector<std::string>& vector);
 };
 
 #endif

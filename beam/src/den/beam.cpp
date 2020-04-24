@@ -77,11 +77,11 @@ Beam* Beam::getInstance()
 }
 
 
-std::string Beam::getString(std::string string) {
+std::string Beam::getString(const std::string& string) {
     return string;
 }
 
-std::string Beam::vectorToBeam(std::vector<std::string> vector, std::string delimiter) {
+std::string Beam::vectorToBeam(const std::vector<std::string>& vector, const std::string& delimiter) {
     std::ostringstream result_string;
     if (!vector.empty())
     {
@@ -92,7 +92,7 @@ std::string Beam::vectorToBeam(std::vector<std::string> vector, std::string deli
     return result_string.str();
 }
 
-std::string Beam::mBB(std::vector<std::string> vector) {
+std::string Beam::mBB(const std::vector<std::string>& vector) {
     std::ostringstream result_string;
     if (!vector.empty()) {
         std::copy(vector.begin(), vector.end()-1,
@@ -102,7 +102,7 @@ std::string Beam::mBB(std::vector<std::string> vector) {
     return result_string.str();
 }
 
-std::vector<std::string> Beam::tokenizeBeam(std::string beam) {
+std::vector<std::string> Beam::tokenizeBeam(const std::string& beam) const {
     regex beam_splitter("\\s+");
     sregex_token_iterator iterator(beam.begin(), beam.end(), beam_splitter, -1);
     sregex_token_iterator end;
@@ -110,7 +110,7 @@ std::vector<std::string> Beam::tokenizeBeam(std::string beam) {
     return beam_tokens;
 }
 
-std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
+std::string Beam::processNumSeq(const std::vector<std::string>& numSeq) {
     std::vector<std::string> processedSeq;
     std::set<std::string> dozens = {"10", "20", "30", "40", "50", "60", "70", "80", "90"};
     std::set<std::string> digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
@@ -154,7 +154,7 @@ std::string Beam::processNumSeq(std::vector<std::string> numSeq) {
     return vectorToBeam(processedSeq, "");
 }
 
-void Beam::finishNumSeq(std::string token) {
+void Beam::finishNumSeq(const std::string& token) {
     mNumFlag = false;
     mResult.push_back(processNumSeq(mNumSeq));
     mNumSeq.clear();
@@ -180,7 +180,7 @@ void Beam::finishAbbrSeq() {
     mAbbrSeq.clear();
 }
 
-void Beam::dealWithNumberToken(std::string token) {
+void Beam::dealWithNumberToken(const std::string& token) {
     if (!mNumFlag) {
         mNumFlag = true;
     }
@@ -190,7 +190,7 @@ void Beam::dealWithNumberToken(std::string token) {
     }
 }
 
-std::string Beam::main(std::string beam) {
+std::string Beam::main(const std::string& beam) {
     Tokens beam_tokens = tokenizeBeam(beam);
     for (auto i = 0; i != beam_tokens.size(); ++i) {
         std::string token = beam_tokens[i];
@@ -221,8 +221,7 @@ std::string Beam::main(std::string beam) {
     return meam;
 }
 
-std::string Beam::beamSearch(std::string beam_) {
-    std::string beam = std::move(beam_);
+std::string Beam::beamSearch(const std::string& beam) {
     std::string meam = main(beam);
     return meam;
 }
