@@ -222,6 +222,11 @@ std::string Beam::main(const std::string& beam) {
 }
 
 std::string Beam::beamSearch(const std::string& beam) {
+    mResult.clear();
+    mNumSeq.clear();
+    mAbbrSeq.clear();
+    mNumFlag = false;
+    mAbbrFlag = false;
     std::string meam = main(beam);
     return meam;
 }
