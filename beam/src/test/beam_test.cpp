@@ -56,6 +56,15 @@ BOOST_AUTO_TEST_SUITE(BeamTest)
         BOOST_REQUIRE_EQUAL(output == true_output, true);
     }
 
+    BOOST_AUTO_TEST_CASE(Test4) {
+        const std::string
+                input = "one fifth and one fourth",
+                true_output = "1/5 and 1/4";
+        const std::string output = Fixture::instance()->beam.beamSearch(input);
+        std::cout << output << std::endl;
+        BOOST_REQUIRE_EQUAL(output == true_output, true);
+    }
+
 
 BOOST_AUTO_TEST_SUITE_END()
 

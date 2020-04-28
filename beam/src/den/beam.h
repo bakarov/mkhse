@@ -29,6 +29,8 @@ public:
     Dictionary numberDictionary;
     Dictionary measureDictionary;
     Dictionary symbolDictionary;
+    Dictionary fractionDictionary;
+    std::set<std::string> d;
 private:
     static Beam* instance;
     Tokens mResult;
@@ -45,6 +47,7 @@ private:
     void dealWithNumberToken(const std::string& token);
     void checkSequencesAreNotEmpty();
     std::string mBB(const std::vector<std::string>& vector);
+    void afterProc();
 };
 
 #endif

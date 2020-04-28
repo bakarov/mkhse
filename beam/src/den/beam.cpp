@@ -65,6 +65,17 @@ Beam::Beam() {
             {"tilde", "~"},
             {"underscore", "_"},
     };
+    fractionDictionary = {
+            {"half", "2"},
+            {"third", "3"},
+            {"fourth", "4"},
+            {"fifth", "5"},
+            {"sixth", "6"},
+            {"seventh", "7"},
+            {"eighth", "8"},
+            {"nienth", "9"}
+    };
+    d = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 }
 
 Beam* Beam::getInstance()
@@ -217,8 +228,26 @@ std::string Beam::main(const std::string& beam) {
         }
     }
     checkSequencesAreNotEmpty();
+    Beam::afterProc();
     std::string meam = mBB(mResult);
     return meam;
+}
+
+void Beam::afterProc() {
+    Tokens processedTokens;
+    for (auto i = 0; i != mResult.size(); ++i) {
+        if (i != mResult.size() - 1) {
+            if (d.find(mResult[i]) != d.end() && fractionDictionary.find(mResult[i+1]) != fractionDictionary.end()) {
+                processedTokens.emplace_back(mResult[i] + '/' + fractionDictionary[mResult[i+1]]);
+                ++i;
+            } else {
+                processedTokens.emplace_back(mResult[i]);
+            }
+        } else {
+            processedTokens.emplace_back(mResult[i]);
+        }
+    }
+    mResult = processedTokens;
 }
 
 std::string Beam::beamSearch(const std::string& beam) {
